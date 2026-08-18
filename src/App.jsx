@@ -1,122 +1,89 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { Component } from "react";
+import "./App.css";
+import { nanoid } from "nanoid";
+import ContactForm from "./components/ContactForm/ContactForm";
+import Filter from "./components/Filter/Filter";
+import ContactList from "./components/  ContactList/  ContactList";
 
-function App() {
-  const [count, setCount] = useState(0)
+class App extends Component {
+  state = {
+    contacts: [
+      { id: "id-1", name: "Rosie Simpson", number: "459-12-56" },
+      { id: "id-2", name: "Hermione Kline", number: "443-89-12" },
+      { id: "id-3", name: "Eden Clements", number: "645-17-79" },
+      { id: "id-4", name: "Annie Copeland", number: "227-91-26" },
+    ],
+    // name: "",
+    // number: "",
+    // id: "",
+    filter: "",
+  };
 
-  return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+  hendelSend = (e) => {
+    e.preventDefault();
 
-      <div className="ticks"></div>
+    
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+    const itemFil = this.state.contacts.filter((item) => item.name === e.currentTarget.elements.name.value)
+
+    console.log(itemFil.length)
+    if(itemFil.length >= 1){
+     alert('Не можно додавати однакова імя')
+         e.currentTarget.reset();
+     return
+    }
+
+    const item = {
+      name: e.currentTarget.elements.name.value,
+      number: e.currentTarget.elements.number.value,
+      id: nanoid(),
+    };
+
+    this.state.contacts.push(item);
+
+    this.setState({
+      contacts: this.state.contacts,
+      name: e.currentTarget.elements.name.value,
+      number: e.currentTarget.elements.number.value,
+      // id: this.id
+    });
+
+    e.currentTarget.reset();
+  };
+
+  hedlelInput = (e) => {
+    this.setState({
+      filter: e.currentTarget.value,
+    })
+  };
+
+  deleteItem = (id ) => {
+    this.setState((prev) => ({
+      contacts: prev.contacts.filter((item) => item.id !== id)
+    }))
+  }
+
+  render() {
+    const { contacts, name, number,  filter } = this.state;
+
+    const itemFilter = contacts.filter((item) => item.name.toLocaleLowerCase().includes(filter.toLocaleLowerCase()))
+    
+    // console.log(itemFilter)
+
+    return (
+      <>
+        <h1>Phonebook</h1>
+        <ContactForm hendelSend={this.hendelSend}/>
+
+        <h2>Contacts</h2>
+
+
+        <Filter hedlelInput={this.hedlelInput}/>
+       <ContactList itemFilter={itemFilter} deleteItem={this.deleteItem}/>
+      </>
+    );
+  }
 }
 
-export default App
+export default App;

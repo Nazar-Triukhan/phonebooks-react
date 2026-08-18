@@ -3,17 +3,18 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "",
+  "homepage": "https://nazar-triukhan.github.io/phoneBooks-react/",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "predeploy": "npm run build", 
-    "deploy": "gh-pages -d dist", 
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist",
     "lint": "eslint .",
     "preview": "vite preview"
   },
   "dependencies": {
     "gh-pages": "^6.3.0",
+    "nanoid": "^6.0.1",
     "react": "^19.2.8",
     "react-dom": "^19.2.8"
   },

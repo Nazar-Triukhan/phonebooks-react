@@ -19,19 +19,33 @@ class App extends Component {
     filter: "",
   };
 
+  componentDidMount() {
+    const saveContacts = localStorage.getItem('users')
+
+    if(saveContacts){
+      this.setState({
+        contacts: JSON.parse(saveContacts)
+      })
+    }
+  }
+
+  componentDidUpdate(_, prevState) {
+    if (prevState.contacts !== this.state.contacts) {
+      window.localStorage.setItem("users", JSON.stringify(this.state.contacts));
+    }
+  }
+
   hendelSend = (e) => {
     e.preventDefault();
 
-    
+    const itemFil = this.state.contacts.filter(
+      (item) => item.name === e.currentTarget.elements.name.value,
+    );
 
-
-    const itemFil = this.state.contacts.filter((item) => item.name === e.currentTarget.elements.name.value)
-
-    console.log(itemFil.length)
-    if(itemFil.length >= 1){
-     alert('Не можно додавати однакова імя')
-         e.currentTarget.reset();
-     return
+    if (itemFil.length >= 1) {
+      alert("Не можно додавати однакова імя");
+      e.currentTarget.reset();
+      return;
     }
 
     const item = {
@@ -40,47 +54,43 @@ class App extends Component {
       id: nanoid(),
     };
 
-    this.state.contacts.push(item);
-
-    this.setState({
-      contacts: this.state.contacts,
-      name: e.currentTarget.elements.name.value,
-      number: e.currentTarget.elements.number.value,
-      // id: this.id
-    });
+  this.setState((prev) => ({
+  contacts: [...prev.contacts, item],
+    }));
 
     e.currentTarget.reset();
+  };
+
+  deleteItem = (id) => {
+    this.setState((prev) => ({
+      contacts: prev.contacts.filter((item) => item.id !== id),
+    }));
   };
 
   hedlelInput = (e) => {
     this.setState({
       filter: e.currentTarget.value,
-    })
+    });
   };
 
-  deleteItem = (id ) => {
-    this.setState((prev) => ({
-      contacts: prev.contacts.filter((item) => item.id !== id)
-    }))
-  }
-
   render() {
-    const { contacts, name, number,  filter } = this.state;
+    const { contacts, name, number, filter } = this.state;
 
-    const itemFilter = contacts.filter((item) => item.name.toLocaleLowerCase().includes(filter.toLocaleLowerCase()))
-    
+    const itemFilter = contacts.filter((item) =>
+      item.name.toLocaleLowerCase().includes(filter.toLocaleLowerCase()),
+    );
+
     // console.log(itemFilter)
 
     return (
       <>
         <h1>Phonebook</h1>
-        <ContactForm hendelSend={this.hendelSend}/>
+        <ContactForm hendelSend={this.hendelSend} />
 
         <h2>Contacts</h2>
 
-
-        <Filter hedlelInput={this.hedlelInput}/>
-       <ContactList itemFilter={itemFilter} deleteItem={this.deleteItem}/>
+        <Filter hedlelInput={this.hedlelInput} />
+        <ContactList itemFilter={itemFilter} deleteItem={this.deleteItem} />
       </>
     );
   }

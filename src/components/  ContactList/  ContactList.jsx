@@ -2,9 +2,11 @@ import { Component } from "react";
 import style from './ContactList.module.css'
 
 
+
 class ContactList extends Component {
 
 
+  
     render () {
 
         const {itemFilter, deleteItem} = this.props
@@ -20,7 +22,9 @@ class ContactList extends Component {
           })}
         </ul>
         )
-    }
+    } 
 }
+
+
 
 export default ContactList

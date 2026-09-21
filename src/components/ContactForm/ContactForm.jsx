@@ -1,13 +1,11 @@
-import { Component } from "react";
+
 import style from './ContactForm.module.css'
 
-class ContactForm extends Component {
+function ContactForm ({hendelSend}) {
 
 
 
-    render() {
 
-        const {hendelSend} = this.props
         return (
         <form onSubmit={hendelSend} className={style.form}>
           <p>Name:</p>
@@ -31,7 +29,7 @@ class ContactForm extends Component {
           <button type="submit" className={style.btn}>Add contact</button>
         </form>
         )
-    }
+    
 }
 
 export default ContactForm

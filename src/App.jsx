@@ -1,44 +1,26 @@
-import { Component } from "react";
+
+import { useState, useEffect } from "react";
 import "./App.css";
 import { nanoid } from "nanoid";
 import ContactForm from "./components/ContactForm/ContactForm";
 import Filter from "./components/Filter/Filter";
 import ContactList from "./components/  ContactList/  ContactList";
 
-class App extends Component {
-  state = {
-    contacts: [
-      { id: "id-1", name: "Rosie Simpson", number: "459-12-56" },
-      { id: "id-2", name: "Hermione Kline", number: "443-89-12" },
-      { id: "id-3", name: "Eden Clements", number: "645-17-79" },
-      { id: "id-4", name: "Annie Copeland", number: "227-91-26" },
-    ],
-    // name: "",
-    // number: "",
-    // id: "",
-    filter: "",
-  };
+function App() {
+  const [contacts, setContacts] = useState(() => {
+    const saveContacts = localStorage.getItem("users");
+    return saveContacts ? JSON.parse(saveContacts) : [];
+  });
+  const [filter, setFilter] = useState("");
 
-  componentDidMount() {
-    const saveContacts = localStorage.getItem('users')
+  useEffect(() => {
+    window.localStorage.setItem("users", JSON.stringify(contacts));
+  }, [contacts]);
 
-    if(saveContacts){
-      this.setState({
-        contacts: JSON.parse(saveContacts)
-      })
-    }
-  }
-
-  componentDidUpdate(_, prevState) {
-    if (prevState.contacts !== this.state.contacts) {
-      window.localStorage.setItem("users", JSON.stringify(this.state.contacts));
-    }
-  }
-
-  hendelSend = (e) => {
+  const hendelSend = (e) => {
     e.preventDefault();
 
-    const itemFil = this.state.contacts.filter(
+    const itemFil = contacts.filter(
       (item) => item.name === e.currentTarget.elements.name.value,
     );
 
@@ -54,46 +36,34 @@ class App extends Component {
       id: nanoid(),
     };
 
-  this.setState((prev) => ({
-  contacts: [...prev.contacts, item],
-    }));
+    setContacts((prev) => [...prev, item]);
 
     e.currentTarget.reset();
   };
 
-  deleteItem = (id) => {
-    this.setState((prev) => ({
-      contacts: prev.contacts.filter((item) => item.id !== id),
-    }));
+  const deleteItem = (id) => {
+    setContacts((prev) => prev.filter((item) => item.id !== id));
   };
 
-  hedlelInput = (e) => {
-    this.setState({
-      filter: e.currentTarget.value,
-    });
+  const hedlelInput = (e) => {
+    setFilter(e.currentTarget.value);
   };
 
-  render() {
-    const { contacts, name, number, filter } = this.state;
+  const itemFilter = contacts.filter((item) =>
+    item.name.toLocaleLowerCase().includes(filter.toLocaleLowerCase()),
+  );
 
-    const itemFilter = contacts.filter((item) =>
-      item.name.toLocaleLowerCase().includes(filter.toLocaleLowerCase()),
-    );
+  return (
+    <>
+      <h1>Phonebook</h1>
+      <ContactForm hendelSend={hendelSend} />
 
-    // console.log(itemFilter)
+      <h2>Contacts</h2>
 
-    return (
-      <>
-        <h1>Phonebook</h1>
-        <ContactForm hendelSend={this.hendelSend} />
-
-        <h2>Contacts</h2>
-
-        <Filter hedlelInput={this.hedlelInput} />
-        <ContactList itemFilter={itemFilter} deleteItem={this.deleteItem} />
-      </>
-    );
-  }
+      <Filter hedlelInput={hedlelInput} />
+      <ContactList itemFilter={itemFilter} deleteItem={deleteItem} />
+    </>
+  );
 }
 
 export default App;

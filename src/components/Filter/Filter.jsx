@@ -1,12 +1,8 @@
-import { Component } from "react";
+
 import styles from './Filter.module.css'
 
-class Filter extends Component {
+function Filter ({hedlelInput}){
 
-
-    render() {
-
-        const {hedlelInput} = this.props
         return (
             <>
             <p>Find contact by name</p>
@@ -14,7 +10,7 @@ class Filter extends Component {
             </>
 
         )
-    }
+    
 }
 
 export default Filter

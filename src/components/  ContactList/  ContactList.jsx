@@ -1,15 +1,12 @@
-import { Component } from "react";
+
 import style from './ContactList.module.css'
 
 
 
-class ContactList extends Component {
+function ContactList ( {itemFilter, deleteItem}){
 
 
-  
-    render () {
 
-        const {itemFilter, deleteItem} = this.props
         return (
              <ul className={style.list}>
           {itemFilter.map(({ name, number, id }) => {
@@ -22,7 +19,7 @@ class ContactList extends Component {
           })}
         </ul>
         )
-    } 
+    
 }
 
 

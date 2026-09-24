@@ -1,11 +1,11 @@
-
+import { useContext } from 'react';
 import style from './ContactList.module.css'
+import { ContactContext } from '../../ContactContext';
 
 
+function ContactList ( ){
 
-function ContactList ( {itemFilter, deleteItem}){
-
-
+  const {itemFilter,deleteItem , } = useContext(ContactContext)
 
         return (
              <ul className={style.list}>

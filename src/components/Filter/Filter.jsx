@@ -1,7 +1,11 @@
-
+import { use, useContext } from 'react'
 import styles from './Filter.module.css'
+import { ContactContext } from '../../ContactContext'
 
-function Filter ({hedlelInput}){
+function Filter (){
+
+    const {hedlelInput} = useContext(ContactContext)
+
 
         return (
             <>

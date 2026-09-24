@@ -1,9 +1,10 @@
-
+import { useContext  } from 'react'
 import style from './ContactForm.module.css'
+import { ContactContext } from '../../ContactContext'
 
-function ContactForm ({hendelSend}) {
+function ContactForm () {
 
-
+  const {hendelSend, inputId} = useContext(ContactContext)
 
 
         return (
@@ -11,6 +12,7 @@ function ContactForm ({hendelSend}) {
           <p>Name:</p>
           <input
           className={style.inp}
+          ref={inputId}
             type="text"
             name="name"
             // pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
